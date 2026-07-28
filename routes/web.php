@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\mailController;
 
 Route::get('/', function () {
     return view('home');
@@ -16,3 +17,7 @@ Route::post("/login",[authController::class, 'login',])->name("LoginPost");
 Route::get("Dashboard/Admin",function(){
     return view("Dashboard/Admin");
 })->name("DashboardAdmin");
+
+
+Route::post("/IndexSendMessage",[mailController::class,"IndexSendMessage"]);
+

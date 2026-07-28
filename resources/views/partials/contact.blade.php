@@ -125,7 +125,7 @@
 
             <!-- Contact Form -->
             <div class="rounded-3xl bg-white p-8 shadow-xl">
-
+<div id="successBanner" class="hidden absolute right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> ✅ Your message has been sent successfully.</div>
                 <h3 class="text-3xl font-bold text-slate-900">
                     Send Us a Message
                 </h3>
@@ -134,38 +134,47 @@
                     Fill in the form below and we'll respond as soon as possible.
                 </p>
 
-                <form class="mt-8 space-y-6">
+                <div class="mt-8 space-y-6">
 
                     <div class="grid gap-6 sm:grid-cols-2">
-
-                        <input
+                        <div>
+                        <input id="name"
                             type="text"
                             placeholder="Full Name"
-                            class="w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500">
-
-                        <input
+                            class="indexCon w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500">
+                            
+                             <p class="text-red-500" id="errname"></p>
+                        </div>
+                        <div>
+                        <input id="email"
                             type="email"
                             placeholder="Email Address"
-                            class="w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500">
-
+                            class="indexCon w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500">
+                         <p class="text-red-500" id="erremail"></p>
+                        </div>
                     </div>
-
-                    <input
+                    <div>
+                          <input id="subject"
                         type="text"
                         placeholder="Subject"
-                        class="w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500">
-
+                        class="indexCon w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500">
+                        <p class="text-red-500" id="errsubject"></p>
+                    </div>
+        
+                  <div>
                     <textarea
+                    id="message"
                         rows="6"
                         placeholder="Your Message"
-                        class="w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500 resize-none"></textarea>
-
-                    <button
-                        class="w-full rounded-xl bg-sky-600 px-6 py-4 font-semibold text-white transition hover:bg-sky-700">
-                        Send Message
+                        class="indexCon w-full rounded-xl border border-slate-300 px-5 py-4 outline-none transition focus:border-sky-500 resize-none"></textarea>
+                     <p class="text-red-500" id="errmessage"></p>
+                 </div>
+                   <button id="msgBtn" class="flex items-center justify-center gap-2 w-full rounded-xl bg-sky-600 px-6 py-4 font-semibold text-white transition hover:bg-sky-700">
+                     <span>Send Message</span>
+                     <span id="msgLoader"class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                     </button>
 
-                </form>
+                </div>
 
             </div>
 
