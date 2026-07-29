@@ -3,10 +3,7 @@
 
         <!-- Logo -->
         <a href="/" class="flex items-center gap-3">
-            <div
-                class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-r from-sky-600 to-cyan-500 text-xl font-bold text-white shadow-lg">
-                Q
-            </div>
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-r from-sky-600 to-cyan-500 text-xl font-bold text-white shadow-lg">Q</div>
 
             <div>
                 <h1 class="text-xl font-bold text-slate-900">

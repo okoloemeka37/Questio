@@ -1,4 +1,4 @@
- @extends('layouts.app')
+ @extends('layouts.nuetral')
 
 @section('title', 'Questiontag Limited_Login')
 
@@ -13,13 +13,18 @@
           <p class="text-gray-500 mt-2">Log in to continue</p>
         </div>
 
-        <form class="space-y-4" method="POST" action="{{route('LoginPost')}}">
+        @error('failed')
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+      @enderror
+        <form class="space-y-4" method="POST" action="{{route('OwnerLoginPost')}}">
         @csrf
          <!--  {error.message && <div class="bg-red-100 text-red-700 border border-red-300 rounded-lg px-4 py-3">    <p class="text-sm">{error.message}</p></div>}-->
           <div>
             <label class="block text-gray-600 text-sm mb-1">UserName</label>
-            <input type="text"  placeholder="UserName" name="username" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition"  />
-                <p class='text-red-600'></p>
+            <input type="text"  placeholder="UserName" value="{{ @old('username')}}" name="username" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition"  />
+                 @error('username')
+          <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
           </div>
 
           <div>
@@ -28,7 +33,9 @@
                 <input class='w-full outline-0' name="password" type="text" placeholder="••••••••" value=""  />
                 
             </div>
-             <p class='text-red-600'></p>
+              @error('password')
+          <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
 
           </div>
 

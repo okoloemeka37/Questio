@@ -126,7 +126,9 @@
             <!-- Contact Form -->
             <div class="rounded-3xl bg-white p-8 shadow-xl">
 <div id="successBanner" class="hidden absolute right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> ✅ Your message has been sent successfully.</div>
-                <h3 class="text-3xl font-bold text-slate-900">
+<div id="errorBanner" class="hidden absolute right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-red-300 to-red-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> Something went wrong: </div>
+
+<h3 class="text-3xl font-bold text-slate-900">
                     Send Us a Message
                 </h3>
 

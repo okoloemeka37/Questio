@@ -41,16 +41,45 @@ fetch("/IndexSendMessage", {
 })
 .then(res => res.json())
 .then(res => {
-    document.querySelector("#msgLoader").classList.replace("inline-block", "hidden");
-    document.querySelector("#successBanner").classList.remove("hidden");
-    entries.forEach(entry => {entry.value=""})
-    setTimeout(() => {
-            document.querySelector("#successBanner").classList.add("hidden");
 
-    }, 4000);
+    document.querySelector("#msgLoader").classList.replace("inline-block", "hidden");
+
+    if (res.success) {
+
+        document.querySelector("#successBanner").classList.remove("hidden");
+
+        entries.forEach(entry => {
+            entry.value = "";
+        });
+
+        setTimeout(() => {
+            document.querySelector("#successBanner").classList.add("hidden");
+        }, 4000);
+
+    } else {
+        document.querySelector("#errorBanner").classList.remove("hidden");
+        console.error(res.error);
+
+        document.querySelector("#errorBanner").innerText += res.error.message.substring(0,20);
+
+        setTimeout(() => {
+              document.querySelector("#errorBanner").classList.add("hidden");
+        }, 7000);
+    }
+
 })
 .catch(err => {
+            document.querySelector("#errorBanner").classList.remove("hidden");
+
     document.querySelector("#msgLoader").classList.replace("inline-block", "hidden");
+
     console.error(err);
+
+    document.querySelector("#errorBanner").innerText +="An unexpected error occurred.";
+ setTimeout(() => {
+              document.querySelector("#errorBanner").classList.add("hidden");
+        }, 7000);
 });
+
+
 })
