@@ -18,4 +18,5 @@
 
 @include('partials.contact')
 
+<p>Hello</p>
 @endsection
