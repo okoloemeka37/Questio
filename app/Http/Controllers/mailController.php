@@ -18,7 +18,7 @@ class mailController extends Controller
     ];
  try {
 
-    Mail::to('okoloemeka47@gmail.com')->send(new ContactMail($data));
+   // Mail::to('okoloemeka47@gmail.com')->send(new ContactMail($data));
 
     Contactmessage::create([
         'name'    => $request->name,

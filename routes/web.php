@@ -16,7 +16,7 @@ Route::get("/Owner/Auth/Login", function(){
 Route::post("/login",[authController::class, 'Ownerlogin',])->name("OwnerLoginPost");
 
 //Routing to Owner Dashboard
-Route::middleware("auth:owner")->group(function () {
+Route::middleware("owner.auth")->group(function () {
 
     Route::get("/quesAdmin",[OwnerController::class,"dashboard"])->name("quesAdmin");
 
