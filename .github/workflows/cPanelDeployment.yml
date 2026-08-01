@@ -1,0 +1,75 @@
+name: Deploy Laravel to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: composer
+
+      # Composer
+      - name: Install Composer Packages
+        run: composer install --no-dev --prefer-dist --optimize-autoloader
+
+      # Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # NPM
+      - name: Install Packages
+        run: npm ci
+
+      # Build Vite
+      - name: Build Assets
+        run: npm run build
+
+      # Install lftp
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # Upload Laravel Project
+      - name: Upload Laravel
+        run: |
+          lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" "${{ secrets.FTP_SERVER }}" <<EOF
+          set ssl:verify-certificate no
+          mirror -R \
+            --delete \
+            --verbose \
+            --exclude .git/ \
+            --exclude .github/ \
+            --exclude node_modules/ \
+            --exclude tests/ \
+            --exclude .env \
+            --exclude public/ \
+            ./ Question
+          bye
+          EOF
+
+      # Upload Public Folder
+      - name: Upload Public
+        run: |
+          lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" "${{ secrets.FTP_SERVER }}" <<EOF
+          set ssl:verify-certificate no
+          mirror -R \
+            --delete \
+            --verbose \
+            public/ public_html
+          bye
+          EOF
