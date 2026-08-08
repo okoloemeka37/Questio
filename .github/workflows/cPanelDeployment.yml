@@ -70,6 +70,7 @@ jobs:
         run: |
           timeout 30 lftp -d -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
           set ssl:verify-certificate no
+          set ftp:use-epsv true
           set net:timeout 10
           set net:max-retries 1
           set net:reconnect-interval-base 2
