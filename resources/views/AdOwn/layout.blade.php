@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Questiontag Limited')</title>
     <script src="https://kit.fontawesome.com/d335dcf51b.js" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
     @vite(['resources/css/app.css','resources/js/admin.js'])
 </head>
 <body>
@@ -60,7 +60,7 @@
           <el-menu anchor="bottom end" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
             <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Your profile</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Settings</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</a>
+            <form action="{{ route("owner.logout") }}" method="POST">@csrf<button type="submit" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</button></form>  
           </el-menu>
         </el-dropdown>
       </div>
@@ -78,65 +78,27 @@
   </el-disclosure>
 </nav>
 
+    <main>
 
-<!-- Right Messages Sidebar -->
-<aside id="SideMsg" class="hidden fixed top-15 right-0 h-screen w-96 bg-white border-l border-gray-200 shadow-2xl flex-col">
+       <!-- Header -->
+    <div class="border-b border-slate-200 bg-white">
 
-    <!-- Header -->
-    <div class="flex items-center justify-between px-6 py-5 border-b bg-gradient-to-r from-sky-600 to-blue-600">
-        <div>
-            <h2 class="text-xl font-bold text-white">
-                Notifications
-            </h2>
-            <p class="text-sm text-sky-100">{{ count($notifications) }}</p>
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-8 py-6">
+
+            <div>
+                          <a href="{{route('quesAdmin')}}" ><h1 class="text-3xl font-bold text-slate-900">{{auth('owner')->user()->username}}</h1></a>
+
+                <p class="mt-1 text-slate-500">
+                    Welcome back. Here's an overview of QuestionTag.
+                </p>
+            </div>
+
+            <a href="{{route('createAdminsIndex')}}" ><button class="rounded-xl bg-sky-600 px-6 py-3 font-semibold text-white transition hover:bg-sky-700"> + Create Profile</button></a>
+
         </div>
 
-        <button id="closeSideMsg" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white transition">
-            ✕
-        </button>
     </div>
 
-    <!-- Search -->
-    <div class="p-4 border-b bg-gray-50">
-        <input
-            type="text"
-            placeholder="Search messages..."
-            class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
-        >
-    </div>
-
-    <!-- Messages -->
-    <div class="flex-1 overflow-y-auto">
-
-          @foreach ($notifications as $note )
-              <!-- Item -->
-        <button class="group w-full text-left px-5 py-4 hover:bg-gray-50 transition">
-            <div class="flex items-start gap-3">
-
-                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-purple-500 text-white font-bold">
-                    {{ substr($note['name'],0,1) }}
-                </div>
-
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between">
-                        <h3 class="font-semibold text-gray-900">{{ $note['name'] }}</h3>
-
-                        <span class="text-xs text-gray-400">
-                           {{ $note->created_at->format('M d') }}
-                        </span>
-                    </div>
-                    <p class="mt-1 text-xs text-gray-500 truncate">{{ $note['summary'] }}...</p>
-                </div>
-
-            </div>
-        </button>
-          @endforeach      
-
-    </div>
-
-</aside>
-
-    <main>
         @yield('content')
     </main>
 

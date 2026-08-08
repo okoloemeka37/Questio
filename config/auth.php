@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Owner;
+use App\Models\Admin;
 
 return [
 
@@ -47,7 +48,12 @@ return [
         'owner'=>[
             'driver'=>'session',
             'provider'=>'owners',
+        ],
+         'admin'=>[
+            'driver'=>'session',
+            'provider'=>'admins',
         ]
+
     ],
 
     /*
@@ -70,12 +76,17 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
+            'model' => User::class,
         ],
         'owners'=>[
             'driver'=>'eloquent',
-            'model'=> env('AUTH_MODEL', Owner::class),
+            'model'=> Owner::class,
+        ],
+         'admins'=>[
+            'driver'=>'eloquent',
+            'model'=> Admin::class,
         ]
+
 
         // 'users' => [
         //     'driver' => 'database',
