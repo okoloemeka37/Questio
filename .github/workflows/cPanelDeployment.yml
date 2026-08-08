@@ -65,36 +65,15 @@ jobs:
             echo "SERVER is available"
           fi
 
-      # Upload Laravel Project
-      - name: Upload Laravel
+      # Test FTP Connection
+      - name: Test FTP Connection
         run: |
-          lftp -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
+          timeout 30 lftp -d -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
           set ssl:verify-certificate no
-
-          mirror -R \
-            --delete \
-            --verbose \
-            --exclude .git/ \
-            --exclude .github/ \
-            --exclude node_modules/ \
-            --exclude tests/ \
-            --exclude .env \
-            --exclude public/ \
-            ./ Question
-
-          bye
-          EOF
-
-      # Upload Public Folder
-      - name: Upload Public
-        run: |
-          lftp -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
-          set ssl:verify-certificate no
-
-          mirror -R \
-            --delete \
-            --verbose \
-            public/ Question/public_html
-
+          set net:timeout 10
+          set net:max-retries 1
+          set net:reconnect-interval-base 2
+          pwd
+          ls
           bye
           EOF
