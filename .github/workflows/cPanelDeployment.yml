@@ -38,6 +38,7 @@ jobs:
 
       # Build Vite
       - name: Build Assets
+      - name: Build Assets
         run: npm run build
 
       # Install lftp
@@ -66,10 +67,11 @@ jobs:
           fi
 
       # Upload Laravel Project
-       - name: Upload Laravel
+      - name: Upload Laravel
         run: |
           lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" "${{ secrets.FTP_SERVER }}" <<EOF
           set ssl:verify-certificate no
+
           mirror -R \
             --delete \
             --verbose \
@@ -79,7 +81,8 @@ jobs:
             --exclude tests/ \
             --exclude .env \
             --exclude public/ \
-            ./ Question
+            ./
+
           bye
           EOF
 
@@ -88,6 +91,7 @@ jobs:
         run: |
           lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" "${{ secrets.FTP_SERVER }}" <<EOF
           set ssl:verify-certificate no
+
           mirror -R \
             --delete \
             --verbose \
