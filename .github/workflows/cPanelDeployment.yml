@@ -45,31 +45,24 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lftp
 
       # Upload Laravel Project
-      - name: Upload Laravel
-        run: |
-          lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" "${{ secrets.FTP_SERVER }}" <<EOF
-          set ssl:verify-certificate no
-          mirror -R \
-            --delete \
-            --verbose \
-            --exclude .git/ \
-            --exclude .github/ \
-            --exclude node_modules/ \
-            --exclude tests/ \
-            --exclude .env \
-            --exclude public/ \
-            ./ Question
-          bye
-          EOF
+    - name: Check FTP secrets
+  run: |
+    if [ -z "${{ secrets.FTP_USERNAME }}" ]; then
+      echo "FTP_USERNAME is EMPTY"
+    else
+      echo "FTP_USERNAME is available"
+    fi
 
-      # Upload Public Folder
-      - name: Upload Public
-        run: |
-          lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" "${{ secrets.FTP_SERVER }}" <<EOF
-          set ssl:verify-certificate no
-          mirror -R \
-            --delete \
-            --verbose \
-            public/ public_html
+    if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then
+      echo "FTP_PASSWORD is EMPTY"
+    else
+      echo "FTP_PASSWORD is available"
+    fi
+
+    if [ -z "${{ secrets.FTP_SERVER }}" ]; then
+      echo "FTP_SERVER is EMPTY"
+    else
+      echo "FTP_SERVER is available"
+    fi
           bye
           EOF
