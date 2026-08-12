@@ -10,33 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # PHP
+      # PHP Setup
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
           tools: composer
 
-      # Composer
+      # Composer Setup
       - name: Install Composer Packages
         run: composer install --no-dev --prefer-dist --optimize-autoloader
 
-      # Node
+      # Node Setup
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      # NPM
+      # NPM Setup
       - name: Install Packages
         run: npm ci
 
-      # Build Vite
+      # Build Assets
       - name: Build Assets
         run: npm run build
 
@@ -65,16 +64,20 @@ jobs:
             echo "SERVER is available"
           fi
 
-      # Test FTP Connection
-           # Test FTP Connection
-      - name: Test FTP Connection
+      # Test FTP Connection & Sync Files
+      - name: Deploy via FTPS
         run: |
-          timeout 30 lftp -d -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
+          lftp -d -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
           set ssl:verify-certificate no
-          set ftp:prefer-epsv true
+          set ftp:use-epsv off
+          set ftp:passive-mode on
           set net:timeout 10
-          set net:max-retries 4
+          set net:max-retries 3
           set net:reconnect-interval-base 2
+          
+          # Optional: Mirror command to sync your Laravel files to cPanel
+          # mirror --reverse --delete --verbose ./ /public_html/
+          
           pwd
           ls
           bye
