@@ -49,5 +49,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: 22  # Change to 21098 if cPanel uses non-standard SSH port
-          TARGET: /home/YOUR_CPANEL_USERNAME/public_html/
+          TARGET: /home/questio/public_html/Question
           EXCLUDE: "/.git/, /.github/, /node_modules/, /tests/"
