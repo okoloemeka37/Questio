@@ -73,7 +73,7 @@ jobs:
           set ssl:verify-certificate no
           set ftp:prefer-epsv true
           set net:timeout 10
-          set net:max-retries 1
+          set net:max-retries 4
           set net:reconnect-interval-base 2
           pwd
           ls
