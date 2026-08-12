@@ -1,4 +1,4 @@
-name: Deploy Laravel to cPanel
+name: Deploy Laravel to cPanel via SSH/SFTP
 
 on:
   push:
@@ -39,46 +39,15 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      # Install lftp
-      - name: Install lftp
-        run: sudo apt-get update && sudo apt-get install -y lftp
-
-      # Check FTP Secrets
-      - name: Check FTP secrets
-        run: |
-          if [ -z "${{ secrets.USERNAME }}" ]; then
-            echo "USERNAME is EMPTY"
-          else
-            echo "USERNAME is available"
-          fi
-
-          if [ -z "${{ secrets.PASSWORD }}" ]; then
-            echo "PASSWORD is EMPTY"
-          else
-            echo "PASSWORD is available"
-          fi
-
-          if [ -z "${{ secrets.SERVER }}" ]; then
-            echo "SERVER is EMPTY"
-          else
-            echo "SERVER is available"
-          fi
-
-      # Test FTP Connection & Sync Files
-      - name: Deploy via FTPS
-        run: |
-          lftp -d -u "${{ secrets.USERNAME }},${{ secrets.PASSWORD }}" "${{ secrets.SERVER }}" <<EOF
-          set ssl:verify-certificate no
-          set ftp:use-epsv off
-          set ftp:passive-mode on
-          set net:timeout 10
-          set net:max-retries 3
-          set net:reconnect-interval-base 2
-          
-          # Optional: Mirror command to sync your Laravel files to cPanel
-          # mirror --reverse --delete --verbose ./ /public_html/
-          
-          pwd
-          ls
-          bye
-          EOF
+      # Sync files using SSH/rsync Action
+      - name: Deploy files via SSH/rsync
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          sftp: true
+          port: 22  # Update to 21098 if cPanel uses non-standard SSH port
+          protocol: sftp
+          local-dir: ./
+          server-dir: /home/questio1/public_html/Question
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
