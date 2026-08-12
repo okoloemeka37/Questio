@@ -39,15 +39,14 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      
-     # Sync files using SSH/rsync Action
-      - name: Deploy files via SSH
-        uses: easingthemes/ssh-deploy@v5.1.0
+      # Sync files using SSH/rsync Action
+      - name: Deploy files via SCP
+        uses: appleboy/scp-action@v0.1.7
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: "-rlgoDzc --delete"
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          REMOTE_PORT: 22  # Change to 21098 if cPanel uses non-standard SSH port
-          TARGET: /home/questio/public_html/Question
-          EXCLUDE: "/.git/, /.github/, /node_modules/, /tests/"
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22  # Update if cPanel uses port 21098
+          source: "./"
+          target: "/home/questio1/Question"
+          rm: false # Set to true if you want to clean the target dir first
