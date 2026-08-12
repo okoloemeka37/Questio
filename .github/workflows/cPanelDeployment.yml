@@ -39,20 +39,30 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      # Sync files using SSH/rsync Action
-      - name: Deploy via Native SSH/SCP
+      - name: Compress and Deploy via SSH
         env:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          # Set up SSH Key
+          # 1. Setup SSH Key
           mkdir -p ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          
-          # Add host to known_hosts to prevent interactive prompts
           ssh-keyscan -p 22 -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
-          # Sync files using scp (-r for recursive, -P for port)
-          scp -P 22 -r ./ $SSH_USER@$SSH_HOST:/home/questio1/Question
+          # 2. Archive deployment files (excluding unneeded heavy directories)
+          tar --exclude='./.git' \
+              --exclude='./.github' \
+              --exclude='./node_modules' \
+              --exclude='./tests' \
+              -czf deploy.tar.gz .
+
+          # 3. Upload the single archive (BatchMode prevents hanging on password prompts)
+          scp -o BatchMode=yes -P 22 deploy.tar.gz $SSH_USER@$SSH_HOST:/home/questio1/Question/
+
+          # 4. Extract archive on server and remove the tarball
+          ssh -o BatchMode=yes -p 22 $SSH_USER@$SSH_HOST "cd /home/questio1/Question && tar -xzf deploy.tar.gz && rm deploy.tar.gz"
+
+          # 5. Clean up local runner archive
+          rm deploy.tar.gz
