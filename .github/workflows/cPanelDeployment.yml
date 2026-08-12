@@ -39,15 +39,15 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      # Sync files using SSH/rsync Action
-      - name: Deploy files via SSH/rsync
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      
+     # Sync files using SSH/rsync Action
+      - name: Deploy files via SSH
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          server: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          sftp: true
-          port: 22  # Update to 21098 if cPanel uses non-standard SSH port
-          protocol: sftp
-          local-dir: ./
-          server-dir: /home/questio1/public_html/Question
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzc --delete"
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_PORT: 22  # Change to 21098 if cPanel uses non-standard SSH port
+          TARGET: /home/YOUR_CPANEL_USERNAME/public_html/
+          EXCLUDE: "/.git/, /.github/, /node_modules/, /tests/"
