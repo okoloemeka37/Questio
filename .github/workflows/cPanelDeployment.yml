@@ -39,30 +39,130 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      # Compress and Deploy
       - name: Compress and Deploy via SSH
         env:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          # 1. Setup SSH Key
+
+          # ============================================================
+          # 1. Setup SSH
+          # ============================================================
+
           mkdir -p ~/.ssh
+
           echo "$SSH_KEY" > ~/.ssh/id_rsa
+
           chmod 600 ~/.ssh/id_rsa
+
           ssh-keyscan -p 22 -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
-          # 2. Archive files into /tmp/ to avoid tar modifying the source directory
-          tar --exclude='./.git' \
-              --exclude='./.github' \
-              --exclude='./node_modules' \
-              --exclude='./tests' \
-              -czf /tmp/deploy.tar.gz .
 
-          # 3. Upload single compressed archive
-          scp -o BatchMode=yes -P 22 /tmp/deploy.tar.gz $SSH_USER@$SSH_HOST:/home/questio1/Question/
+          # ============================================================
+          # 2. Create deployment archive
+          # ============================================================
 
-          # 4. Unpack on cPanel server and delete remote archive
-          ssh -o BatchMode=yes -p 22 $SSH_USER@$SSH_HOST "cd /home/questio1/Question && tar -xzf deploy.tar.gz && rm deploy.tar.gz"
+          echo "Creating deployment archive..."
 
-          # 5. Clean up local runner archive
-          rm /tmp/deploy.tar.gz
+          tar \
+            --exclude='./.git' \
+            --exclude='./.github' \
+            --exclude='./node_modules' \
+            --exclude='./tests' \
+            --exclude='./deploy.tar.gz' \
+            -czf /tmp/deploy.tar.gz .
+
+
+          echo "Deployment archive created."
+
+          ls -lh /tmp/deploy.tar.gz
+
+
+          # ============================================================
+          # 3. Upload archive to cPanel
+          # ============================================================
+
+          echo "Uploading deployment archive..."
+
+          scp \
+            -o BatchMode=yes \
+            -P 22 \
+            /tmp/deploy.tar.gz \
+            "$SSH_USER@$SSH_HOST:/home/questio1/Question/deploy.tar.gz"
+
+
+          echo "Archive uploaded successfully."
+
+
+          # ============================================================
+          # 4. Extract deployment on cPanel
+          # ============================================================
+
+          echo "Connecting to cPanel and extracting deployment..."
+
+          ssh \
+            -o BatchMode=yes \
+            -p 22 \
+            "$SSH_USER@$SSH_HOST" << 'EOF'
+
+            set -e
+
+            cd /home/questio1/Question
+
+            echo "=========================================="
+            echo "Current directory:"
+            pwd
+            echo "=========================================="
+
+            echo "Checking deployment archive..."
+
+            if [ ! -f deploy.tar.gz ]; then
+              echo "ERROR: deploy.tar.gz was not found."
+              exit 1
+            fi
+
+            ls -lh deploy.tar.gz
+
+            echo "=========================================="
+            echo "Extracting Laravel application..."
+            echo "=========================================="
+
+            tar -xzf deploy.tar.gz --overwrite
+
+            echo "=========================================="
+            echo "Extraction completed."
+            echo "=========================================="
+
+            echo "Removing deployment archive..."
+
+            rm -f deploy.tar.gz
+
+            echo "=========================================="
+            echo "Checking archive removal..."
+            echo "=========================================="
+
+            if [ -f deploy.tar.gz ]; then
+              echo "ERROR: deploy.tar.gz still exists."
+              exit 1
+            fi
+
+            echo "deploy.tar.gz successfully removed."
+
+            echo "=========================================="
+            echo "Deployment completed successfully."
+            echo "=========================================="
+
+          EOF
+
+
+          # ============================================================
+          # 5. Clean up GitHub Actions runner
+          # ============================================================
+
+          echo "Cleaning up local deployment archive..."
+
+          rm -f /tmp/deploy.tar.gz
+
+          echo "Local cleanup completed."
