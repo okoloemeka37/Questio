@@ -1,4 +1,4 @@
-name: Deploy Laravel to cPanel via SSH/SFTP
+name: Deploy Laravel to cPanel via SFTP
 
 on:
   push:
@@ -10,47 +10,98 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ============================================================
+      # 1. Checkout repository
+      # ============================================================
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # PHP Setup
+
+      # ============================================================
+      # 2. PHP Setup
+      # ============================================================
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
           tools: composer
 
-      # Composer Setup
+
+      # ============================================================
+      # 3. Install Composer packages
+      # ============================================================
+
       - name: Install Composer Packages
         run: composer install --no-dev --prefer-dist --optimize-autoloader
 
-      # Node Setup
+
+      # ============================================================
+      # 4. Node Setup
+      # ============================================================
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      # NPM Setup
+
+      # ============================================================
+      # 5. Install NPM packages
+      # ============================================================
+
       - name: Install Packages
         run: npm ci
 
-      # Build Assets
+
+      # ============================================================
+      # 6. Build frontend assets
+      # ============================================================
+
       - name: Build Assets
         run: npm run build
 
-      # Compress and Deploy
-      - name: Compress and Deploy via SSH
+
+      # ============================================================
+      # 7. Prepare deployment directory
+      # ============================================================
+
+      - name: Prepare Deployment Files
+        run: |
+          echo "Preparing deployment directory..."
+
+          rm -rf /tmp/laravel-deploy
+
+          mkdir -p /tmp/laravel-deploy
+
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='tests' \
+            --exclude='.env' \
+            --exclude='deploy.tar.gz' \
+            --exclude='storage/app/public' \
+            --exclude='public/storage' \
+            ./ /tmp/laravel-deploy/
+
+          echo "Deployment directory prepared."
+
+          echo "Files to be deployed:"
+          du -sh /tmp/laravel-deploy
+
+
+      # ============================================================
+      # 8. Setup SSH
+      # ============================================================
+
+      - name: Setup SSH
         env:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-
-          # ============================================================
-          # 1. Setup SSH
-          # ============================================================
-
           mkdir -p ~/.ssh
 
           echo "$SSH_KEY" > ~/.ssh/id_rsa
@@ -60,109 +111,34 @@ jobs:
           ssh-keyscan -p 22 -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
 
-          # ============================================================
-          # 2. Create deployment archive
-          # ============================================================
+      # ============================================================
+      # 9. Transfer Laravel files directly to cPanel
+      # ============================================================
 
-          echo "Creating deployment archive..."
-
-          tar \
-            --exclude='./.git' \
-            --exclude='./.github' \
-            --exclude='./node_modules' \
-            --exclude='./tests' \
-            --exclude='./deploy.tar.gz' \
-            -czf /tmp/deploy.tar.gz .
-
-
-          echo "Deployment archive created."
-
-          ls -lh /tmp/deploy.tar.gz
-
-
-          # ============================================================
-          # 3. Upload archive to cPanel
-          # ============================================================
-
-          echo "Uploading deployment archive..."
+      - name: Transfer Files to cPanel
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          echo "Starting file transfer..."
 
           scp \
+            -r \
             -o BatchMode=yes \
             -P 22 \
-            /tmp/deploy.tar.gz \
-            "$SSH_USER@$SSH_HOST:/home/questio1/Question/deploy.tar.gz"
+            /tmp/laravel-deploy/. \
+            "$SSH_USER@$SSH_HOST:/home/questio1/Question/"
+
+          echo "File transfer completed successfully."
 
 
-          echo "Archive uploaded successfully."
+      # ============================================================
+      # 10. Cleanup
+      # ============================================================
 
+      - name: Cleanup
+        run: |
+          rm -rf /tmp/laravel-deploy
 
-          # ============================================================
-          # 4. Extract deployment on cPanel
-          # ============================================================
-
-          echo "Connecting to cPanel and extracting deployment..."
-
-          ssh \
-            -o BatchMode=yes \
-            -p 22 \
-            "$SSH_USER@$SSH_HOST" << 'EOF'
-
-            set -e
-
-            cd /home/questio1/Question
-
-            echo "=========================================="
-            echo "Current directory:"
-            pwd
-            echo "=========================================="
-
-            echo "Checking deployment archive..."
-
-            if [ ! -f deploy.tar.gz ]; then
-              echo "ERROR: deploy.tar.gz was not found."
-              exit 1
-            fi
-
-            ls -lh deploy.tar.gz
-
-            echo "=========================================="
-            echo "Extracting Laravel application..."
-            echo "=========================================="
-
-            tar -xzf deploy.tar.gz --overwrite
-
-            echo "=========================================="
-            echo "Extraction completed."
-            echo "=========================================="
-
-            echo "Removing deployment archive..."
-
-            rm -f deploy.tar.gz
-
-            echo "=========================================="
-            echo "Checking archive removal..."
-            echo "=========================================="
-
-            if [ -f deploy.tar.gz ]; then
-              echo "ERROR: deploy.tar.gz still exists."
-              exit 1
-            fi
-
-            echo "deploy.tar.gz successfully removed."
-
-            echo "=========================================="
-            echo "Deployment completed successfully."
-            echo "=========================================="
-
-          EOF
-
-
-          # ============================================================
-          # 5. Clean up GitHub Actions runner
-          # ============================================================
-
-          echo "Cleaning up local deployment archive..."
-
-          rm -f /tmp/deploy.tar.gz
-
-          echo "Local cleanup completed."
+          echo "Cleanup completed."
+          echo "Deployment finished successfully."
