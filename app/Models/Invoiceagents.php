@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoiceagents extends Model
 {
-     protected $fillable=['name','email','admin_id','password','AgentId','type'];
+     protected $fillable=['name','email','admin_id','password','AgentId','type','active'];
 
 
     public function admin(){

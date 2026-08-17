@@ -78,9 +78,7 @@
                     Total Software
                 </p>
 
-                <h2 class="mt-3 text-4xl font-bold">
-                    8
-                </h2>
+                <h2 class="mt-3 text-4xl font-bold">0</h2>
 
             </div>
 
@@ -90,9 +88,7 @@
                     Active Clients
                 </p>
 
-                <h2 class="mt-3 text-4xl font-bold">
-                    214
-                </h2>
+                <h2 class="mt-3 text-4xl font-bold">{{ count($admin_Count) }}</h2>
 
             </div>
 
@@ -102,9 +98,7 @@
                     Monthly Revenue
                 </p>
 
-                <h2 class="mt-3 text-4xl font-bold">
-                    ₦3.4M
-                </h2>
+                <h2 class="mt-3 text-4xl font-bold">0</h2>
 
             </div>
 
@@ -114,9 +108,7 @@
                     Pending Renewals
                 </p>
 
-                <h2 class="mt-3 text-4xl font-bold">
-                    17
-                </h2>
+                <h2 class="mt-3 text-4xl font-bold">0</h2>
 
             </div>
 
@@ -221,9 +213,7 @@
                                 Revenue
                             </p>
 
-                            <h4 class="mt-1 text-2xl font-bold">
-                                ₦460k
-                            </h4>
+                            <h4 class="mt-1 text-2xl font-bold">#0.00k</h4>
 
                         </div>
 
@@ -231,19 +221,9 @@
 
                     <div class="mt-8 flex gap-3">
 
-                        <button
-                            class="rounded-xl bg-sky-600 px-5 py-3 text-white">
+                        <button class="rounded-xl bg-sky-600 px-5 py-3 text-white">Open </button>
 
-                            Open
-
-                        </button>
-
-                        <button
-                            class="rounded-xl border border-slate-300 px-5 py-3">
-
-                            Edit
-
-                        </button>
+                        <button class="rounded-xl border border-slate-300 px-5 py-3"> Edit </button>
 
                     </div>
 

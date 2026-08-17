@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoicefields extends Model
 {
-    protected $fillable=['name','email','phone','address','admin_id','Tracking_Id'];
+    protected $fillable=['name','email','phone','address','admin_id','Tracking_Id','active','company_id'];
 
 
     public function admin(){

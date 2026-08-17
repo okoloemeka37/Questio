@@ -35,6 +35,10 @@ Route::middleware("owner.auth")->group(function () {
     //Navigating to messages
 
     Route::get("/Owner/Message",[OwnerController::class, "MessagePage"])->name('OwnerMessages');
+
+    //Get individual messag
+
+    Route::get("/Owner/Message/singMessage/{id}",[OwnerController::class, "singMessage"])->name("singMessage");
 });
 
 
@@ -46,23 +50,23 @@ Route::middleware('admin.auth')->group(function () {
 Route::get("/tool/I",[InvoiceGenController::class, 'indexPage'])->name('InvoiceTool');
 
 //route to create field
-
 Route::get("/tool/I/CreateField",function(){return view("Tools/Invoice/Create/Createfields");})->name("InvoiceCreateFieldGet");
 //post field
 Route::post("/tool/I/CreateField",[InvoiceFieldsController::class,'createFields'])->name("InvoiceCreateFieldPost");
 //View Field
-Route::get("/tool/I/ViewField",function(){return view("Tools/Invoice/View/Viewfields");})->name("InvoiceViewFields");
-
-
+Route::get("/tool/I/ViewField",[InvoiceFieldsController::class, 'getFields'])->name("InvoiceViewFields");
 
 
 //Agent
-
 Route::get("/tool/I/CreateAgent",function(){return view("Tools/Invoice/Create/Createagents");})->name("InvoiceCreateAgentGet");
 //Post Agent
 Route::post("/tool/I/CreateAgent",[InvoiceAgentsController::class,'createAgents'])->name("InvoiceCreateAgentPost");
 //View Agent
 Route::get("/tool/I/ViewAgent",function(){return view("Tools/Invoice/View/Viewagents");})->name("InvoiceViewAgents");
+//View Edit field 
+Route::get("/tool/I/EditField/{id}",[InvoiceFieldsController::class, 'ViewEditField'])->name("InvoiceEditFieldGet");
+
+Route::post("/tool/I/EditField/{id}",[InvoiceFieldsController::class, 'PostEditField'])->name("InvoiceEditFieldPost");
 
 
 });

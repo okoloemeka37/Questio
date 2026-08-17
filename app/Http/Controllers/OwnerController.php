@@ -8,7 +8,7 @@ use App\Models\Contactmessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Owner;
+use App\Models\Admin;
 
 
 use Illuminate\Support\Facades\Hash;
@@ -16,8 +16,9 @@ class OwnerController extends Controller
 {
     public function dashboard(){
     $notifications = Notification::all();
+    $admin_Count=Admin::all();
     $admins=DB::table("admins")->select("tool", DB::raw('COUNT(tool) as toolCount'))->groupBy("tool")->get();
-        return view('AdOwn/Owner',compact('notifications','admins'));
+        return view('AdOwn/Owner',compact('notifications','admins','admin_Count'));
     }
 
     
@@ -50,8 +51,18 @@ class OwnerController extends Controller
 
     //Message
 
+    //get all messages
     public function MessagePage(){
-        $messages=Contactmessage::get();
-        return view('AdOwn/message',compact('messages'));
+        $messages=Contactmessage::paginate(10);
+        return view('AdOwn/Messages/Allmessage',compact('messages'));
     }
+
+    //get individual message
+
+    public function singMessage($id){
+      $message=Contactmessage::find($id);
+        return view("AdOwn/Messages/singMessage",compact('message')); 
+    }    
+
+    
 }

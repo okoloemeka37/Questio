@@ -74,7 +74,7 @@
             <div class="rounded-2xl bg-white p-6 shadow">
                 <p class="text-sm text-gray-500">Total Agents</p>
 
-                <h2 class="mt-3 text-3xl font-bold text-sky-600">{{ count($fields) }}</h2>
+                <h2 class="mt-3 text-3xl font-bold text-sky-600">{{ count($agents) }}</h2>
 
                 <p class="mt-2 text-sm text-green-600"></p>
             </div>
@@ -145,47 +145,21 @@
                 </h2>
 
                 <div class="space-y-5">
+                        @if (count($notifications)===0)
+                            <p>No Activity</p>
 
-                    <div class="border-l-4 border-sky-500 pl-4">
-                        <p class="font-semibold">
-                            Invoice INV-1001 created
-                        </p>
+                            @else
+                            @foreach ($notifications as $note)
+                             <div class="border-l-4 border-sky-500 pl-4">
+                                <p class="font-semibold">{{$note->subject}}</p>
 
-                        <p class="text-sm text-gray-500">
-                            5 minutes ago
-                        </p>
-                    </div>
+                                <p class="text-sm text-gray-500">{{$note->created_at->diffForHumans()}} </p>
+                             </div>
+                            @endforeach
 
-                    <div class="border-l-4 border-green-500 pl-4">
-                        <p class="font-semibold">
-                            New Agent Registered
-                        </p>
-
-                        <p class="text-sm text-gray-500">
-                            35 minutes ago
-                        </p>
-                    </div>
-
-                    <div class="border-l-4 border-purple-500 pl-4">
-                        <p class="font-semibold">
-                            VAT Parameter Updated
-                        </p>
-
-                        <p class="text-sm text-gray-500">
-                            Today
-                        </p>
-                    </div>
-
-                    <div class="border-l-4 border-orange-500 pl-4">
-                        <p class="font-semibold">
-                            New Invoice Template
-                        </p>
-
-                        <p class="text-sm text-gray-500">
-                            Yesterday
-                        </p>
-                    </div>
-
+                        @endif
+                  
+                  
                 </div>
 
             </div>

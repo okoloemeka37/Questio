@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Invoiceagents;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Invoicenotifications;
+
 class InvoiceAgentsController extends Controller
 {
     public function createAgents(Request $request){
@@ -22,8 +24,17 @@ class InvoiceAgentsController extends Controller
                 'password'=>Hash::make($fields['password']),
                 'admin_id'=>$admin_id,
                 'type'=>'Agent',
-                'AgentId'=>$agentId
+                'AgentId'=>$agentId,
+                'active'=>'Active'
 
+            ]);
+
+             //Add To Notification
+            Invoicenotifications::create([
+                'subject'=>"A New Agent(". $fields['name']. ") Was Created",
+                'type'=>'agent',
+                'company_id'=>$admin_id,
+                'user_id'=>$admin_id
             ]);
         return redirect()->route("InvoiceTool");
         } catch (\Throwable $th) {

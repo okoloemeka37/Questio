@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('note');
             $table->string('password');
             $table->string('tool');
+            $table->string('active');
             $table->timestamps();
         });
     }

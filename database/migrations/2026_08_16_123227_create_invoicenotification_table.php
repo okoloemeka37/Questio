@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoiceagents', function (Blueprint $table) {
+        Schema::create('invoicenotifications', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
-            $table->string('AgentId');
+            $table->text("subject");
+            $table->integer('company_id');
+            $table->integer('user_id');
             $table->string('type');
-            $table->string('active');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoiceagents');
+        Schema::dropIfExists('invoicenotification');
     }
 };

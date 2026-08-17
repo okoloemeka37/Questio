@@ -50,4 +50,6 @@ class Admin extends Authenticatable
     public function agents(){
         return $this->hasMany(Invoiceagents::class);
     }
+
+    
 }

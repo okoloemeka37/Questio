@@ -13,7 +13,7 @@
 
                 <div class="mb-2 flex items-center gap-2 text-sm text-gray-500">
 
-                    <a href="#"
+                    <a href="{{ route('quesAdmin') }}"
                        class="transition hover:text-blue-600">
                         Dashboard
                     </a>
@@ -259,7 +259,7 @@
             <div class="divide-y divide-gray-100">
 
                     @foreach ($messages as $mes)
-                          <a href="#"
+                          <a href="{{ route("singMessage",['id'=>$mes->id]) }}"
                    class="group block bg-blue-50/40 px-6 py-5
                           transition hover:bg-blue-50">
 
@@ -327,60 +327,8 @@
 
 
             <!-- Pagination -->
-            <div class="flex flex-col gap-4 border-t border-gray-200
-                        px-6 py-4 sm:flex-row sm:items-center
-                        sm:justify-between">
-
-                <p class="text-sm text-gray-500">
-                    Showing
-                    <span class="font-semibold text-gray-700">1</span>
-                    to
-                    <span class="font-semibold text-gray-700">4</span>
-                    of
-                    <span class="font-semibold text-gray-700">128</span>
-                    messages
-                </p>
-
-                <div class="flex items-center gap-2">
-
-                    <button
-                        class="rounded-lg border border-gray-300 bg-white
-                               px-3 py-2 text-sm text-gray-500
-                               hover:bg-gray-50">
-                        Previous
-                    </button>
-
-                    <button
-                        class="rounded-lg bg-blue-600 px-3 py-2
-                               text-sm font-semibold text-white">
-                        1
-                    </button>
-
-                    <button
-                        class="rounded-lg border border-gray-300 bg-white
-                               px-3 py-2 text-sm text-gray-700
-                               hover:bg-gray-50">
-                        2
-                    </button>
-
-                    <button
-                        class="rounded-lg border border-gray-300 bg-white
-                               px-3 py-2 text-sm text-gray-700
-                               hover:bg-gray-50">
-                        3
-                    </button>
-
-                    <button
-                        class="rounded-lg border border-gray-300 bg-white
-                               px-3 py-2 text-sm text-gray-700
-                               hover:bg-gray-50">
-                        Next
-                    </button>
-
-                </div>
-
-            </div>
-
+            <div class="mt-4"> {{ $messages->links() }}</div>
+          
         </div>
 
     </div>

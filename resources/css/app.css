@@ -11,4 +11,17 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-     
+/* Loader animation for bar */
+@keyframes loading {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(200%);
+    }
+
+    100% {
+        transform: translateX(400%);
+    }
+}

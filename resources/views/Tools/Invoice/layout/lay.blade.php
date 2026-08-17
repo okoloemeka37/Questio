@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Questiontag Limited')</title>
 
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css','resources/js/Invoice/Field.js']) 
 </head>
 <body>
 
@@ -93,15 +93,11 @@
 
                 <div
                     class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-sm font-bold text-white">
-                    {{-- {{ strtoupper(substr(Auth::user()->username,0,1)) }} --}}
-                    Z.C
-                </div>
+                     {{ strtoupper(substr(auth('admin')->user()->username,0,1)) }}
+                                    </div>
 
                 <div class="hidden md:block">
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        {{-- {{ Auth::user()->username }} --}}
-                        Zyler.com
-                    </h4>
+                    <h4 class="text-sm font-semibold text-gray-800">{{ auth('admin')->user()->company }}</h4>
 
                     <p class="text-xs text-gray-500">
                         Administrator

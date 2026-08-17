@@ -1,3 +1,6 @@
+///THIS PAGE HOLD ALL OWNER NOTIFICATION LOGIC 
+
+//NOTIFICATION DROP-DOWN HOME PAGE
 const viewNote=document.querySelector("#viewNote");
 
 viewNote.addEventListener("click",()=>{

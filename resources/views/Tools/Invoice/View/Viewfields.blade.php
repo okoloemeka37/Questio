@@ -79,9 +79,7 @@
                             Total Fields
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-gray-800">
-                            32
-                        </h2>
+                        <h2 class="mt-2 text-3xl font-bold text-gray-800">{{ count($fields) }}</h2>
 
                     </div>
 
@@ -124,9 +122,7 @@
                             Active Fields
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-green-600">
-                            28
-                        </h2>
+                        <h2 class="mt-2 text-3xl font-bold text-green-600">{{ count($fields) }}</h2>
 
                     </div>
 
@@ -164,9 +160,7 @@
                             Added This Month
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-purple-600">
-                            7
-                        </h2>
+                        <h2 class="mt-2 text-3xl font-bold text-purple-600">{{ count($fields) }}</h2>
 
                     </div>
 
@@ -254,14 +248,19 @@
 
 
         <!-- Fields Table -->
+        <div id="successBanner" class="hidden fixed top-20 right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> ✅ Status updated successfully.</div>
+
+        <div id="errorBanner" class="hidden fixed top-20 right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-red-300 to-red-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> Something went wrong: </div>
+
+
         <div class="overflow-hidden rounded-2xl border border-gray-200
                     bg-white shadow-sm">
 
             <div class="overflow-x-auto">
 
                 <table class="min-w-full">
-
-                    <!-- Header -->
+                    <div id="loadingBar" class="opacity-0 h-1 w-full overflow-hidden bg-gray-100"><div class="h-full w-1/3 animate-[loading_1.5s_ease-in-out_infinite] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div></div>
+          <!-- Header -->
                     <thead class="border-b border-gray-200 bg-gray-50">
 
                         <tr>
@@ -311,8 +310,13 @@
                     <tbody class="divide-y divide-gray-100">
 
 
-                        <!-- Field 1 -->
-                        <tr class="transition hover:bg-gray-50">
+                        <!-- Field  -->
+     <tr class="transition hover:bg-gray-50">
+                            @if (count($fields)===0)
+                                <p>No fields added yet</p>
+                            @else
+                                @foreach ($fields as $field)
+                                
 
                             <td class="whitespace-nowrap px-6 py-5">
 
@@ -323,19 +327,12 @@
                                                 bg-blue-100 font-bold
                                                 text-blue-700">
 
-                                        JD
-
+                                     {{$field['name'][0]}}
                                     </div>
 
                                     <div>
 
-                                        <p class="font-semibold text-gray-800">
-                                            John Doe
-                                        </p>
-
-                                        <p class="text-sm text-gray-500">
-                                            Customer
-                                        </p>
+                                        <p class="font-semibold text-gray-800">{{$field['name']}}</p>
 
                                     </div>
 
@@ -344,43 +341,30 @@
                             </td>
 
 
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                john@example.com
-                            </td>
+                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">{{ $field['email'] }}</td>
 
 
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                08012345678
-                            </td>
+                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">{{$field['phone']}}</td>
 
 
-                            <td class="max-w-xs px-6 py-5 text-sm text-gray-600">
-                                12 Main Street, Lagos
-                            </td>
+                            <td class="max-w-xs px-6 py-5 text-sm text-gray-600">{{$field['address']}} </td>
 
 
                             <td class="whitespace-nowrap px-6 py-5">
 
-                                <span class="inline-flex items-center gap-2
-                                             rounded-full bg-green-100 px-3
-                                             py-1 text-xs font-semibold
-                                             text-green-700">
+                                <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold
+       {{ $field['active'] == 'Active'
+           ? 'bg-green-100 text-green-700'
+           : 'bg-red-100 text-red-700' }}" id="fieldPoint{{$field['id']}}">
 
-                                    <span class="h-2 w-2 rounded-full bg-green-500"></span>
-
-                                    Active
-
-                                </span>
+                                    <span id="actfield{{$field['id']}}" class="h-2 w-2 rounded-full {{$field['active']=='Active'?'bg-green-500':'bg-red-500'}}"></span><span class="wro">{{$field['active']}}</span></span>
 
                             </td>
 
 
                             <td class="whitespace-nowrap px-6 py-5 text-right">
 
-                                <button
-                                    class="rounded-lg p-2 text-gray-500
-                                           transition hover:bg-blue-50
-                                           hover:text-blue-600">
+                                <button id="{{ $field['id'] }}" class="Field_Change_Active_Status rounded-lg p-2 text-gray-500 transition hover:bg-blue-50 hover:text-blue-600">
 
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-5 w-5"
@@ -413,7 +397,7 @@
                                     class="rounded-lg p-2 text-gray-500
                                            transition hover:bg-yellow-50
                                            hover:text-yellow-600">
-
+                                <a href="{{ route('InvoiceEditFieldGet',['id'=>$field['id']]) }}">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-5 w-5"
                                          fill="none"
@@ -432,182 +416,15 @@
                                                  1 1-4 9.5-9.5z"/>
 
                                     </svg>
-
+                                  </a>
                                 </button>
 
                             </td>
 
-                        </tr>
-
-
-                        <!-- Field 2 -->
-                        <tr class="transition hover:bg-gray-50">
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <div class="flex items-center gap-3">
-
-                                    <div class="flex h-11 w-11 items-center
-                                                justify-center rounded-xl
-                                                bg-purple-100 font-bold
-                                                text-purple-700">
-
-                                        JS
-
-                                    </div>
-
-                                    <div>
-
-                                        <p class="font-semibold text-gray-800">
-                                            Jane Smith
-                                        </p>
-
-                                        <p class="text-sm text-gray-500">
-                                            Customer
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                jane@example.com
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                08123456789
-                            </td>
-
-
-                            <td class="max-w-xs px-6 py-5 text-sm text-gray-600">
-                                45 Independence Avenue, Abuja
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <span class="inline-flex items-center gap-2
-                                             rounded-full bg-green-100 px-3
-                                             py-1 text-xs font-semibold
-                                             text-green-700">
-
-                                    <span class="h-2 w-2 rounded-full bg-green-500"></span>
-
-                                    Active
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-right">
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-blue-50 hover:text-blue-600">
-
-                                    👁
-
-                                </button>
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-yellow-50 hover:text-yellow-600">
-
-                                    ✏️
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-                        <!-- Field 3 -->
-                        <tr class="transition hover:bg-gray-50">
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <div class="flex items-center gap-3">
-
-                                    <div class="flex h-11 w-11 items-center
-                                                justify-center rounded-xl
-                                                bg-orange-100 font-bold
-                                                text-orange-700">
-
-                                        MK
-
-                                    </div>
-
-                                    <div>
-
-                                        <p class="font-semibold text-gray-800">
-                                            Mike Kelvin
-                                        </p>
-
-                                        <p class="text-sm text-gray-500">
-                                            Business
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                mike@example.com
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                09098765432
-                            </td>
-
-
-                            <td class="max-w-xs px-6 py-5 text-sm text-gray-600">
-                                18 Marina Road, Lagos
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <span class="inline-flex items-center gap-2
-                                             rounded-full bg-gray-100 px-3
-                                             py-1 text-xs font-semibold
-                                             text-gray-600">
-
-                                    <span class="h-2 w-2 rounded-full bg-gray-400"></span>
-
-                                    Inactive
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-right">
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-blue-50 hover:text-blue-600">
-
-                                    👁
-
-                                </button>
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-yellow-50 hover:text-yellow-600">
-
-                                    ✏️
-
-                                </button>
-
-                            </td>
-
-                        </tr>
+                       
+                                @endforeach
+                            @endif
+ </tr>
 
                     </tbody>
 
@@ -617,7 +434,7 @@
 
 
             <!-- Pagination -->
-            <div class="flex flex-col gap-4 border-t border-gray-200
+           {{--  <div class="flex flex-col gap-4 border-t border-gray-200
                         px-6 py-4 sm:flex-row sm:items-center
                         sm:justify-between">
 
@@ -682,7 +499,9 @@
 
                 </div>
 
-            </div>
+            </div> --}}
+
+            <div class="mt-4"> {{ $fields->links() }}</div>
 
         </div>
 
