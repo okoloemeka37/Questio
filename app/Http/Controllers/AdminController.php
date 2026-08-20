@@ -73,7 +73,7 @@ class AdminController extends Controller
                         case 'Invoice Generator':
                             return redirect()->route('InvoiceTool');
                     }
-         //return redirect()->route('quesAdmin');
+        return redirect()->route('InvoiceTool');
         }else{
         return back()->withErrors(['failed'=>'Credentials Not Valid']);
     }
