@@ -42,7 +42,7 @@
             </div>
 
             <!-- Back Button -->
-            <a href="{{ route('InvoiceViewAgents') }}
+            <a href="{{ route('InvoiceViewAgents') }}"
                class="hidden items-center gap-2 rounded-xl border border-gray-300
                       bg-white px-5 py-3 text-sm font-semibold text-gray-700
                       shadow-sm transition hover:bg-gray-50 sm:flex">
@@ -119,7 +119,7 @@
                     @csrf
                 <div class="space-y-6">
 
-                    <!-- Name -->
+                    <!--First Name -->
                     <div>
 
                         <label for="name"
@@ -170,6 +170,55 @@
                             @error('name')<p class="text-red-500">{{ $message }}</p>@enderror
                     </div>
 
+                    {{--    <div>
+
+                        <label for="name"
+                               class="mb-2 block text-sm font-semibold text-gray-700">
+
+                            Agent Name
+
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <div class="relative">
+
+                            <div class="pointer-events-none absolute inset-y-0 left-0
+                                        flex items-center pl-4 text-gray-400">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="h-5 w-5"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor">
+
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M16 7a4 4 0 11-8 0 4 4 0
+                                             018 0zM12 14a7 7 0 00-7
+                                             7h14a7 7 0 00-7-7z"/>
+
+                                </svg>
+
+                            </div>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Enter agent Second Name"
+                                class="w-full rounded-xl border border-gray-300
+                                       bg-white py-3.5 pl-12 pr-4 text-gray-800
+                                       placeholder-gray-400 outline-none
+                                       transition duration-200
+                                       focus:border-green-500
+                                       focus:ring-4 focus:ring-green-100"
+                           value="{{old('name')}}"  >
+
+                        </div>
+                            @error('name')<p class="text-red-500">{{ $message }}</p>@enderror
+                    </div> --}}
 
                     <!-- Email -->
                     <div>
@@ -204,20 +253,18 @@
                                 </svg>
 
                             </div>
-
+                            <div class="flex  rounded-xl border border-gray-300
+                                       bg-white py-3.5 pl-12 pr-4 text-gray-800 transition duration-200
+                                       focus:border-green-500
+                                       focus:ring-4 focus:ring-green-100 ">
                             <input
-                                type="email"
+                                type="text"
                                 id="email"
                                 name="email"
                                 placeholder="agent@example.com"
-                                class="w-full rounded-xl border border-gray-300
-                                       bg-white py-3.5 pl-12 pr-4 text-gray-800
-                                       placeholder-gray-400 outline-none
-                                       transition duration-200
-                                       focus:border-green-500
-                                       focus:ring-4 focus:ring-green-100"
+                                class="w-100 block bg-white placeholder-gray-400 outline-none"
                           value="{{old('email')}}"   >
-
+                                 <p>@ABC.com</p></div>
                         </div>
 @error('email')<p class="text-red-500">{{ $message }}</p>@enderror
                     </div>

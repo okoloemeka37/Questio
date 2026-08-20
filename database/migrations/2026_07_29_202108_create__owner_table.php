@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+   /*  public function up(): void
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->id();
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('role');
             $table->timestamps();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

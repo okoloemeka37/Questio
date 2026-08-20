@@ -12,17 +12,15 @@
 </head>
 <body>
 
-<nav class="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
+    <nav class="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
 
     <div class="mx-auto flex h-16 items-center justify-between px-6">
 
-        <!-- =====================================================
-             LEFT SIDE
-        ====================================================== -->
+        <!-- Left -->
         <div class="flex items-center gap-8">
 
             <!-- Logo -->
-            <a href="{{ route('InvoiceTool') }}"
+            <a href="#"
                class="flex items-center gap-3">
 
                 <div class="flex h-10 w-10 items-center justify-center
@@ -36,54 +34,31 @@
                     </h1>
 
                     <p class="text-xs text-gray-500">
-                        Admin Dashboard
+                        Agent Portal
                     </p>
                 </div>
 
             </a>
 
 
-            <!-- =================================================
-                 NAVIGATION
-            ================================================== -->
+            <!-- Navigation -->
             <div class="hidden items-center gap-6 lg:flex">
 
-                <!-- Dashboard -->
-                <a href="{{ route('InvoiceTool') }}"
+                <a href="#"
                    class="font-medium text-sky-600">
                     Dashboard
                 </a>
 
-
-                <!-- Invoices -->
                 <a href="#"
                    class="font-medium text-gray-500 transition
                           hover:text-sky-600">
                     Invoices
                 </a>
 
-
-                <!-- Agents -->
-                <a href="{{ route('InvoiceViewAgents') }}"
-                   class="font-medium text-gray-500 transition
-                          hover:text-sky-600">
-                    Agents
-                </a>
-
-
-                <!-- Fields -->
-                <a href="{{ route('InvoiceViewFields') }}"
-                   class="font-medium text-gray-500 transition
-                          hover:text-sky-600">
-                    Fields
-                </a>
-
-
-                <!-- Settings -->
                 <a href="#"
                    class="font-medium text-gray-500 transition
                           hover:text-sky-600">
-                    Settings
+                    Customers
                 </a>
 
             </div>
@@ -91,36 +66,16 @@
         </div>
 
 
-        <!-- =====================================================
-             RIGHT SIDE
-        ====================================================== -->
+
+        <!-- Right -->
         <div class="flex items-center gap-4">
 
-
-            <!-- Search -->
-            <div class="hidden md:block">
-
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    class="w-64 rounded-xl border border-gray-300
-                           px-4 py-2 text-sm outline-none
-                           transition
-                           focus:border-sky-500
-                           focus:ring-2 focus:ring-sky-200">
-
-            </div>
-
-
-            <!-- =================================================
-                 NOTIFICATION
-            ================================================== -->
+            <!-- Notification -->
             <button
                 type="button"
                 class="relative rounded-xl p-2 text-gray-500
                        transition hover:bg-gray-100
-                       hover:text-sky-600
-                       focus:outline-none">
+                       hover:text-sky-600">
 
                 <svg xmlns="http://www.w3.org/2000/svg"
                      class="h-6 w-6"
@@ -139,19 +94,16 @@
 
                 </svg>
 
-
-                <!-- Notification badge -->
-                <span class="absolute right-1 top-1 h-2.5 w-2.5
-                             rounded-full bg-red-500">
+                <span
+                    class="absolute right-1 top-1 h-2.5 w-2.5
+                           rounded-full bg-red-500">
                 </span>
 
             </button>
 
 
 
-            <!-- =================================================
-                 PROFILE DROPDOWN
-            ================================================== -->
+            <!-- Profile Dropdown -->
             <details class="relative">
 
                 <!-- Profile Button -->
@@ -169,22 +121,22 @@
                                bg-sky-600 text-sm font-bold
                                text-white">
 
-                        {{ strtoupper(substr(auth('admin')->user()->username, 0, 1)) }}
+                        {{ strtoupper(substr(auth('agent')->user()->name, 0, 1)) }}
 
                     </div>
 
 
-                    <!-- Admin Information -->
+                    <!-- Agent Info -->
                     <div class="hidden md:block">
 
                         <h4 class="text-sm font-semibold text-gray-800">
 
-                            {{ auth('admin')->user()->company }}
+                            {{ auth('agent')->user()->name }}
 
                         </h4>
 
                         <p class="text-xs text-gray-500">
-                            Administrator
+                            Agent
                         </p>
 
                     </div>
@@ -208,46 +160,41 @@
 
 
 
-                <!-- =================================================
-                     DROPDOWN MENU
-                ================================================== -->
+                <!-- Dropdown -->
                 <div
-                    class="absolute right-0 top-full z-50 mt-2 w-64
+                    class="absolute right-0 top-full z-50 mt-2 w-60
                            overflow-hidden rounded-xl
                            border border-gray-200 bg-white
                            py-1 shadow-xl">
 
 
-                    <!-- Admin Information -->
+                    <!-- Account Info -->
                     <div class="border-b border-gray-100 px-4 py-4">
 
                         <div class="flex items-center gap-3">
 
-                            <!-- Avatar -->
                             <div
                                 class="flex h-10 w-10 shrink-0
                                        items-center justify-center
                                        rounded-full bg-sky-600
                                        text-sm font-bold text-white">
 
-                                {{ strtoupper(substr(auth('admin')->user()->username, 0, 1)) }}
+                                {{ strtoupper(substr(auth('agent')->user()->name, 0, 1)) }}
 
                             </div>
 
-
-                            <!-- Details -->
                             <div class="min-w-0">
 
                                 <p class="truncate text-sm font-semibold
                                           text-gray-800">
 
-                                    {{ auth('admin')->user()->username }}
+                                    {{ auth('agent')->user()->name }}
 
                                 </p>
 
                                 <p class="truncate text-xs text-gray-500">
 
-                                    {{ auth('admin')->user()->email }}
+                                    {{ auth('agent')->user()->email }}
 
                                 </p>
 
@@ -259,9 +206,7 @@
 
 
 
-                    <!-- =================================================
-                         PROFILE
-                    ================================================== -->
+                    <!-- Profile -->
                     <a href="#"
                        class="flex items-center gap-3 px-4 py-3
                               text-sm text-gray-700 transition
@@ -307,84 +252,14 @@
 
 
 
-                    <!-- =================================================
-                         SETTINGS
-                    ================================================== -->
-                    <a href="#"
-                       class="flex items-center gap-3 px-4 py-3
-                              text-sm text-gray-700 transition
-                              hover:bg-gray-50">
-
-                        <div
-                            class="flex h-9 w-9 items-center
-                                   justify-center rounded-lg
-                                   bg-gray-100 text-gray-600">
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M10.325 4.317a1.724
-                                         1.724 0 013.35 0
-                                         1.724 1.724 0 002.573
-                                         1.066 1.724 1.724 0
-                                         012.365 2.365 1.724
-                                         1.724 0 001.066 2.573
-                                         1.724 1.724 0 010 3.35
-                                         1.724 1.724 0 00-1.066
-                                         2.573 1.724 1.724 0
-                                         01-2.365 2.365 1.724
-                                         1.724 0 00-2.573 1.066
-                                         1.724 1.724 0 01-3.35 0
-                                         1.724 1.724 0 00-2.573-1.066
-                                         1.724 1.724 0 01-2.365-2.365
-                                         1.724 1.724 0 00-1.066-2.573
-                                         1.724 1.724 0 010-3.35
-                                         1.724 1.724 0 00-1.066-2.573
-                                         1.724 1.724 0 01-2.365-2.365
-                                         1.724 1.724 0 00-2.573-1.066z"/>
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M15 12a3 3 0 11-6 0
-                                         3 3 0 016 0z"/>
-
-                            </svg>
-
-                        </div>
-
-                        <div>
-
-                            <p class="font-medium">
-                                Settings
-                            </p>
-
-                            <p class="text-xs text-gray-400">
-                                Manage your account
-                            </p>
-
-                        </div>
-
-                    </a>
-
-
-
                     <!-- Divider -->
                     <div class="my-1 border-t border-gray-100"></div>
 
 
 
-                    <!-- =================================================
-                         LOGOUT
-                    ================================================== -->
+                    <!-- Logout -->
                     <form method="POST"
-                          action="{{ route('AdminInvoiceLogout') }}">
+                          action="">
 
                         @csrf
 
@@ -427,7 +302,7 @@
                                 </p>
 
                                 <p class="text-xs text-red-400">
-                                    Logout from admin account
+                                    Logout from your account
                                 </p>
 
                             </div>
@@ -445,9 +320,12 @@
     </div>
 
 </nav>
+
+
     <main>
         @yield('content')
     </main>
 
-    </body>
-    </html>
+</body>
+
+</html>

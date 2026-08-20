@@ -104,35 +104,110 @@
             </div>
 
         </div>
+<!-- Quick Actions -->
+<div class="mt-10">
 
-        <!-- Quick Actions -->
-        <div class="mt-10">
+    <div class="mb-5 flex items-center justify-between">
 
-            <h2 class="mb-5 text-xl font-bold text-gray-800">
+        <div>
+            <h2 class="text-xl font-bold text-gray-800">
                 Quick Actions
             </h2>
 
-            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-
-              @foreach ($actions as $act)
-                    <div class="rounded-2xl {{ $act['color'] }} p-6 text-white shadow transition hover:-translate-y-1 hover:shadow-xl">
-
-             <div class="flex justify-between">
-                  <a href="{{ $act['create']}}" class="w-fit text-4xl p-6">{{$act['icon']}}</a>
-                  <a href="{{ $act['view']}}" class="w-fit text-4xl p-6"> {{$act['viewIcon']}}</a>
-              </div>
-
-                    <h3 class="mt-4 text-xl font-bold">{{ $act['title'] }}</h3>
-
-                    <p class="mt-2 text-sm opacity-90">{{ $act['description'] }}</p>
-
-            </div>
-
-              
-              @endforeach
-            </div>
-
+            <p class="mt-1 text-sm text-gray-500">
+                Quickly manage your invoice system.
+            </p>
         </div>
+
+    </div>
+
+
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+
+        @foreach ($actions as $act)
+
+            <div class="group rounded-2xl border border-gray-200 bg-white
+                        p-5 shadow-sm transition duration-200
+                        hover:-translate-y-1 hover:border-gray-300
+                        hover:shadow-lg">
+
+                <!-- Top -->
+                <div class="flex items-start justify-between">
+
+                    <!-- Icon -->
+                    <div class="flex h-11 w-11 items-center justify-center
+                                rounded-xl {{ $act['color'] }}
+                                text-white shadow-sm">
+
+                        <span class="text-xl">
+                            {{ $act['icon'] }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- View -->
+                    <a href="{{ $act['view'] }}"
+                       class="flex h-9 w-9 items-center justify-center
+                              rounded-lg text-gray-400 transition
+                              hover:bg-gray-100 hover:text-gray-700">
+
+                        {{ $act['viewIcon'] }}
+
+                    </a>
+
+                </div>
+
+
+                <!-- Content -->
+                <div class="mt-5">
+
+                    <h3 class="text-base font-bold text-gray-800">
+                        {{ $act['title'] }}
+                    </h3>
+
+                    <p class="mt-1.5 text-sm leading-5 text-gray-500">
+                        {{ $act['description'] }}
+                    </p>
+
+                </div>
+
+
+                <!-- Create Action -->
+                <div class="mt-5 border-t border-gray-100 pt-4">
+
+                    <a href="{{ $act['create'] }}"
+                       class="inline-flex items-center gap-2 text-sm
+                              font-semibold text-gray-700 transition
+                              hover:text-blue-600">
+
+                        Create {{ $act['title'] }}
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-4 w-4 transition
+                                    group-hover:translate-x-1"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M5 12h14m-6-6l6 6-6 6"/>
+
+                        </svg>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+</div>
 
         <!-- Recent Activity + Recent Invoices -->
         <div class="mt-10 grid gap-6 lg:grid-cols-3">

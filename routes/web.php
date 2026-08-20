@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InvoiceFieldsController;
 use App\Http\Controllers\InvoiceGenController;
 use App\Http\Controllers\InvoiceAgentsController;
+use App\Http\Controllers\InvoiceAgents\AgentController;
 
 Route::get('/', function () {
     return view('home');
@@ -62,17 +63,44 @@ Route::get("/tool/I/CreateAgent",function(){return view("Tools/Invoice/Create/Cr
 //Post Agent
 Route::post("/tool/I/CreateAgent",[InvoiceAgentsController::class,'createAgents'])->name("InvoiceCreateAgentPost");
 //View Agent
-Route::get("/tool/I/ViewAgent",function(){return view("Tools/Invoice/View/Viewagents");})->name("InvoiceViewAgents");
+Route::get("/tool/I/ViewAgent",[InvoiceAgentsController::class, 'getAgents'])->name("InvoiceViewAgents");
 //View Edit field 
 Route::get("/tool/I/EditField/{id}",[InvoiceFieldsController::class, 'ViewEditField'])->name("InvoiceEditFieldGet");
 
+//Post Edit Field
 Route::post("/tool/I/EditField/{id}",[InvoiceFieldsController::class, 'PostEditField'])->name("InvoiceEditFieldPost");
 
+//View Edit Agent
 
+Route::get("/tool/I/EditAgent/{id}",[InvoiceAgentsController::class, 'ViewEditAgent'])->name("InvoiceEditAgentGet");
+//Post Edit Agent
+Route::post("/tool/I/EditAgent/{id}",[InvoiceAgentsController::class, 'PostEditAgent'])->name("InvoiceEditAgentPost");
+
+
+//View Individual field
+
+Route::get("/tool/I/ViewIndField/{id}",[InvoiceFieldsController::class, 'getIndField'])->name("getIndField");
+
+//Admin Logout for invoice generator
+Route::post("/Auth/Admin/Logout",[AdminController::class,'InvLogout'])->name('AdminInvoiceLogout');
 });
 
 
+//Routing for Invoice Agents
 
+Route::middleware('agent.auth')->group(function(){
+//Route to Agent Dashboard;
+
+Route::get('/Invoice/Agent/Dashboard',[AgentController::class,'getInvoiceAgentDashboard'])->name('InvoiceAgentDashboard');
+//View Individual field for agent
+
+Route::get("/Invoice/Agent/ViewField/{field_id}",[AgentController::class,'getInviceAgentField'])->name('getInviceAgentField');
+});
+
+//Login Route For Invoice Agents
+Route::get('Auth/Agent/Login',function (){ return view('Tools.Invoice.AgentSection.Auth.Login');})->name('InvAgentLogin');
+
+Route::post('Auth/Agent/Login',[AgentController::class,'AgentLogin'])->name('AgentLogin');
 
 
 Route::get("Dashboard/Admin",function(){
@@ -82,6 +110,7 @@ Route::get("Dashboard/Admin",function(){
 //Admin Login
 Route::get("/Auth/Admin/Login",[AdminController::class, 'AdminLoginView'])->name("AdminLoginView");
 Route::post("/Auth/Admin/Login",[AdminController::class, 'AdminLogin'])->name("AdminLogin");
+
 
 
 Route::post("/IndexSendMessage",[mailController::class,"IndexSendMessage"]);

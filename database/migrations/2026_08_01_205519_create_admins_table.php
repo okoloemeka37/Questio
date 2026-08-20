@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+   /*  public function up(): void
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('active');
             $table->timestamps();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

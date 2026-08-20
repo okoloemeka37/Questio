@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoiceagents', function (Blueprint $table) {
+        Schema::create('fieldToAgent', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->text('remember_token');
             $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
-            $table->integer('company_id');
-            $table->string('AgentId');
-            $table->string('type');
-            $table->string('active');
+            $table->foreignId('agent_id')->constrained('invoiceagents')->onDelete('cascade');
+            $table->foreignId('field_id')->constrained('invoicefields')->onDelete('cascade');
+            $table->foreignId('company_id')->constrained('admins')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoiceagents');
+        Schema::dropIfExists('fieldToAgent');
     }
 };

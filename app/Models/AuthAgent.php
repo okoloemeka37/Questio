@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Admin extends Authenticatable
+class AuthAgent extends Authenticatable
 {
-    protected $table = 'admins';
+    protected $table = 'invoiceagents';
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -19,7 +19,7 @@ class Admin extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable =['fullname','email','tool','password','username','note','company'];
+    protected $fillable =['name','email','password','company_id','remember_token'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,15 +44,5 @@ class Admin extends Authenticatable
         ];
     }
 
-    public function fields(){
-        return $this->hasMany(Invoicefields::class);
-    }
-    public function agents(){
-        return $this->hasMany(Invoiceagents::class);
-    }
-
-    public function fieldToAgent(){
-        return $this->hasMany(fieldToAgents::class);
-    }
     
 }

@@ -78,7 +78,7 @@
                     Total Software
                 </p>
 
-                <h2 class="mt-3 text-4xl font-bold">0</h2>
+                <h2 class="mt-3 text-4xl font-bold">5</h2>
 
             </div>
 

@@ -79,9 +79,7 @@
                             Total Agents
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-gray-800">
-                            24
-                        </h2>
+                        <h2 class="mt-2 text-3xl font-bold text-gray-800">{{ count($Agent) }}</h2>
                     </div>
 
                     <div class="flex h-12 w-12 items-center justify-center
@@ -121,9 +119,7 @@
                             Active Agents
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-green-600">
-                            21
-                        </h2>
+                        <h2 class="mt-2 text-3xl font-bold text-green-600">{{ count($Agent) }}</h2>
                     </div>
 
                     <div class="flex h-12 w-12 items-center justify-center
@@ -159,9 +155,7 @@
                             Inactive Agents
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-red-500">
-                            3
-                        </h2>
+                        <h2 class="mt-2 text-3xl font-bold text-red-500">{{ count($Agent) }}</h2>
                     </div>
 
                     <div class="flex h-12 w-12 items-center justify-center
@@ -251,12 +245,19 @@
 
 
         <!-- Agents Table -->
+
+         <div id="successBanner" class="hidden fixed top-20 right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> ✅ Status updated successfully.</div>
+
+        <div id="errorBanner" class="hidden fixed top-20 right-0 z-30 animate-pulse rounded-xl bg-gradient-to-r from-red-300 to-red-600 px-6 py-4 text-center text-white font-semibold shadow-lg"> Something went wrong: </div>
+
         <div class="overflow-hidden rounded-2xl border border-gray-200
                     bg-white shadow-sm">
 
             <div class="overflow-x-auto">
 
                 <table class="min-w-full">
+
+                    <div id="loadingBar" class="opacity-0 h-1 w-full overflow-hidden bg-gray-100"><div class="h-full w-1/3 animate-[loading_1.5s_ease-in-out_infinite] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div></div>
 
                     <!-- Table Header -->
                     <thead class="border-b border-gray-200 bg-gray-50">
@@ -319,8 +320,11 @@
                     <!-- Table Body -->
                     <tbody class="divide-y divide-gray-100">
 
-                        <!-- Agent 1 -->
-                        <tr class="transition hover:bg-gray-50">
+                        @if (count($Agent)===0)
+                            <tr><p>No Agents Created</p></tr>
+                        @else
+                            @foreach ($Agent as $ag)
+                                <tr class="transition hover:bg-gray-50">
 
                             <td class="whitespace-nowrap px-6 py-5">
 
@@ -329,21 +333,15 @@
                                     <div class="flex h-11 w-11 items-center
                                                 justify-center rounded-full
                                                 bg-green-100 font-bold
-                                                text-green-700">
-
-                                        JD
-
-                                    </div>
+                                                text-green-700">{{ $ag['name'][0] }} </div>
 
                                     <div>
 
-                                        <p class="font-semibold text-gray-800">
-                                            John Doe
-                                        </p>
+                                        <p class="font-semibold text-gray-800">{{ $ag['name']}}</p>
 
-                                        <p class="text-sm text-gray-500">
+                                       {{--  <p class="text-sm text-gray-500">
                                             AGT-001
-                                        </p>
+                                        </p> --}}
 
                                     </div>
 
@@ -352,44 +350,36 @@
                             </td>
 
 
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                john@example.com
-                            </td>
+                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">{{ $ag['email'] }}</td>
 
 
                             <td class="whitespace-nowrap px-6 py-5 text-sm
-                                       font-semibold text-gray-700">
-
-                                125
-
-                            </td>
+                                       font-semibold text-gray-700">0</td>
 
 
                             <td class="whitespace-nowrap px-6 py-5">
 
                                 <span class="inline-flex items-center gap-2
-                                             rounded-full bg-green-100 px-3
+                                             rounded-full  px-3
                                              py-1 text-xs font-semibold
-                                             text-green-700">
+                                             {{ $ag['active']=='Active'?'text-green-700 bg-green-100':'bg-red-100 text-red-700' }}"id="agentPoint{{$ag['id']}}">
 
-                                    <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                    <span class="h-2 w-2 rounded-full {{ $ag['active']=='Active'?'bg-green-500':'bg-red-500' }}" id="actagent{{$ag['id']}}"></span>
 
-                                    Active
+                                    <span class="agtWor">{{ $ag['active'] }}</span>
 
                                 </span>
 
                             </td>
 
 
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-500">
-                                Jan 12, 2026
-                            </td>
+                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-500">{{ $ag['created_at']->format('M-d-y') }}</td>
 
 
                             <td class="whitespace-nowrap px-6 py-5 text-right">
 
-                                <button
-                                    class="rounded-lg p-2 text-gray-500
+                                <button id="{{ $ag['id'] }}"
+                                    class="Agent_Change_Active_Status rounded-lg p-2 text-gray-500
                                            transition hover:bg-blue-50
                                            hover:text-blue-600">
 
@@ -423,7 +413,7 @@
                                     class="rounded-lg p-2 text-gray-500
                                            transition hover:bg-yellow-50
                                            hover:text-yellow-600">
-
+                                <a href="{{ route('InvoiceEditAgentGet',['id'=>$ag['id']]) }}">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="h-5 w-5"
                                          fill="none"
@@ -442,188 +432,15 @@
                                                  1 1-4 9.5-9.5z"/>
 
                                     </svg>
-
+                                    </a>
                                 </button>
 
                             </td>
 
                         </tr>
 
-
-                        <!-- Agent 2 -->
-                        <tr class="transition hover:bg-gray-50">
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <div class="flex items-center gap-3">
-
-                                    <div class="flex h-11 w-11 items-center
-                                                justify-center rounded-full
-                                                bg-blue-100 font-bold
-                                                text-blue-700">
-
-                                        JS
-
-                                    </div>
-
-                                    <div>
-
-                                        <p class="font-semibold text-gray-800">
-                                            Jane Smith
-                                        </p>
-
-                                        <p class="text-sm text-gray-500">
-                                            AGT-002
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                jane@example.com
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm
-                                       font-semibold text-gray-700">
-
-                                87
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <span class="inline-flex items-center gap-2
-                                             rounded-full bg-green-100 px-3
-                                             py-1 text-xs font-semibold
-                                             text-green-700">
-
-                                    <span class="h-2 w-2 rounded-full bg-green-500"></span>
-
-                                    Active
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-500">
-                                Feb 03, 2026
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-right">
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-blue-50 hover:text-blue-600">
-
-                                    👁
-
-                                </button>
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-yellow-50 hover:text-yellow-600">
-
-                                    ✏️
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-                        <!-- Agent 3 -->
-                        <tr class="transition hover:bg-gray-50">
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <div class="flex items-center gap-3">
-
-                                    <div class="flex h-11 w-11 items-center
-                                                justify-center rounded-full
-                                                bg-purple-100 font-bold
-                                                text-purple-700">
-
-                                        MK
-
-                                    </div>
-
-                                    <div>
-
-                                        <p class="font-semibold text-gray-800">
-                                            Mike Kelvin
-                                        </p>
-
-                                        <p class="text-sm text-gray-500">
-                                            AGT-003
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
-                                mike@example.com
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm
-                                       font-semibold text-gray-700">
-
-                                42
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5">
-
-                                <span class="inline-flex items-center gap-2
-                                             rounded-full bg-red-100 px-3
-                                             py-1 text-xs font-semibold
-                                             text-red-700">
-
-                                    <span class="h-2 w-2 rounded-full bg-red-500"></span>
-
-                                    Inactive
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-500">
-                                Mar 18, 2026
-                            </td>
-
-
-                            <td class="whitespace-nowrap px-6 py-5 text-right">
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-blue-50 hover:text-blue-600">
-
-                                    👁
-
-                                </button>
-
-                                <button class="rounded-lg p-2 text-gray-500
-                                               hover:bg-yellow-50 hover:text-yellow-600">
-
-                                    ✏️
-
-                                </button>
-
-                            </td>
-
-                        </tr>
+                            @endforeach
+                        @endif
 
                     </tbody>
 
@@ -633,7 +450,7 @@
 
 
             <!-- Pagination -->
-            <div class="flex flex-col gap-4 border-t border-gray-200
+           {{--  <div class="flex flex-col gap-4 border-t border-gray-200
                         px-6 py-4 sm:flex-row sm:items-center
                         sm:justify-between">
 
@@ -694,8 +511,8 @@
 
                 </div>
 
-            </div>
-
+            </div> --}}
+   <div class="mt-4"> {{ $Agent->links() }}</div>
         </div>
 
     </div>

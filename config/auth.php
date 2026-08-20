@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\Owner;
 use App\Models\Admin;
+use App\Models\AuthAgent;
 
 return [
 
@@ -52,6 +53,10 @@ return [
          'admin'=>[
             'driver'=>'session',
             'provider'=>'admins',
+        ],
+        'agent'=>[
+            'driver'=>'session',
+            'provider'=>'agents'
         ]
 
     ],
@@ -85,6 +90,10 @@ return [
          'admins'=>[
             'driver'=>'eloquent',
             'model'=> Admin::class,
+        ],
+        'agents'=>[
+            'driver'=>'eloquent',
+            'model'=>AuthAgent::class,
         ]
 
 

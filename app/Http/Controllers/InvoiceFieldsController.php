@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoiceagents;
 use Carbon\Traits\Timestamp;
 use Illuminate\Http\Request;
 
 use App\Models\Invoicefields;
+use App\Models\fieldToAgents;
 use App\Models\Invoicenotifications;
 
+  $admin=auth('admin')->user();
 class InvoiceFieldsController extends Controller
 {
 
@@ -129,15 +132,15 @@ try{
 
         $field=Invoicefields::find($id);
         $field->update([
-                'name'=>$field['name'],
-                'email'=>$field['email'],
-                'address'=>$field['address'],
-                'phone'=>$field['phone'],
+                'name'=>$fields['name'],
+                'email'=>$fields['email'],
+                'address'=>$fields['address'],
+                'phone'=>$fields['phone'],
         ]);
 
          //Add To Notification
             Invoicenotifications::create([
-                'subject'=>"The Field(". $field['name']. ") Was Edited",
+                'subject'=>"The Field(". $fields['name']. ") Was Edited",
                 'type'=>'field',
                 'company_id'=>$admin_id,
                 'user_id'=>$admin_id
@@ -148,5 +151,103 @@ try{
          catch (\Throwable $th) {
                 return back()->withErrors(['failed'=>$th->getMessage()]);
         }
+    }
+
+    //get individual fields
+
+    public function getIndField($id){
+
+        $admin=auth('admin')->user();
+
+        $admin_id=$admin['id'];
+
+        $field=Invoicefields::where('id',$id)->first();
+
+       
+
+       $fieldToAgent = $admin->fieldToAgent()->where('field_id',$id)->pluck('agent_id')->toArray();
+
+       $agents=Invoiceagents::whereNotIn('id',$fieldToAgent)->select('id', 'name','email')->get()->toArray();
+
+       $AgentsInField=Invoiceagents::whereIn('id',$fieldToAgent)->select('id', 'name','email')->get();
+        
+       return view("Tools/Invoice/View/ViewIndField",compact('field','agents','admin_id','AgentsInField'));
+    }
+
+
+
+    
+    //SaveChoiceAgent
+
+    public function SaveChoiceAgent(Request $request){
+          
+        try {
+            fieldToAgents::create([
+                'agent_id'=>$request['agent_id'],
+                'admin_id'=>$request['a_Id'],
+                'company_id'=>$request['a_Id'],
+                'field_id'=>$request['field_id']
+            ]);
+
+             Invoicenotifications::create([
+                'subject'=>"A New Agent was assigned To A field",
+                'type'=>'field',
+                'company_id'=>$request['a_Id'],
+                'user_id'=>$request['a_Id']
+            ]);
+
+             
+                 return response()->json([
+        'success' => true,
+        'data' => [
+            'message' => 'Agent Added successfully.',
+        ]
+    ], 200);
+        } catch (\Throwable $e) {
+              return response()->json([
+        'success' => false,
+        'error' => [
+            'message' => $e->getMessage(),
+            'type'    => get_class($e),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'trace'   => $e->getTraceAsString(),
+        ]
+    ], 500);
+        } 
+ 
+    }
+
+    public function UnassignAgent(Request $request){
+//dd($request['id']);    
+        try{
+
+     fieldToAgents::where(['agent_id'=>$request['agent_id'],'field_id'=>$request['field_id']])->delete();
+
+           Invoicenotifications::create([
+                'subject'=>"A New Agent was Unassigned from A field",
+                'type'=>'field',
+                'company_id'=>$request['a_Id'],
+                'user_id'=>$request['a_Id']
+            ]);
+             return response()->json([
+        'success' => true,
+        'data' => [
+            'message' => 'Agent Removed successfully.',
+        ]
+    ], 200);
+        } catch (\Throwable $e) {
+              return response()->json([
+        'success' => false,
+        'error' => [
+            'message' => $e->getMessage(),
+            'type'    => get_class($e),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'trace'   => $e->getTraceAsString(),
+        ]
+    ], 500);
+        }  
+ 
     }
 }

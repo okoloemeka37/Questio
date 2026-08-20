@@ -311,24 +311,24 @@
 
 
                         <!-- Field  -->
-     <tr class="transition hover:bg-gray-50">
+   
                             @if (count($fields)===0)
                                 <p>No fields added yet</p>
                             @else
                                 @foreach ($fields as $field)
                                 
-
+  <tr class="transition hover:bg-gray-50">
                             <td class="whitespace-nowrap px-6 py-5">
 
                                 <div class="flex items-center gap-3">
 
-                                    <div class="flex h-11 w-11 items-center
+                                    <a href="{{ route('getIndField',['id'=>$field['id']]) }}"><div class="flex h-11 w-11 items-center
                                                 justify-center rounded-xl
                                                 bg-blue-100 font-bold
                                                 text-blue-700">
 
                                      {{$field['name'][0]}}
-                                    </div>
+                                    </div></a>
 
                                     <div>
 
@@ -420,11 +420,11 @@
                                 </button>
 
                             </td>
-
+</tr>
                        
                                 @endforeach
                             @endif
- </tr>
+ 
 
                     </tbody>
 
